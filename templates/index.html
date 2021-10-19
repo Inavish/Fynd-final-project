@@ -112,30 +112,40 @@ style="width:50px;height:50px;"
     <h5 class="card-title">{{i.itemname}}</h5>
     <p class="card-text">{{i.itemprice}}</p>
     <p class="card-text">{{i.itemcolor}}</p>
-    <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#bookforrent">Book for rent</a>
-    <div id="bookforrent" class="modal fade" role="dialog">
+    <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#bookforrent{{i.id}}">Book for rent</a>
+    <div id="bookforrent{{i.id}}" class="modal fade" role="dialog">
    <div class="modal-dialog">
       <div class="modal-content">
          <div class="modal-header">
-            <h4 class="modal-title">Update Information</h4>
+            <h4 class="modal-title"><b>Please confirm you order</b></h4>
          </div>
-         <div class="modal-body">
-            <form style="font-size:25px" method="POST" action="#">
+          <div style="padding: 25px;">
+            <h4><b>Details: </b></h4>
+             <p>Type: {{i.itemname}}</p>
+             <p>Price: {{i.itemprice}} Rs/Day</p>
+             <p>Colour: {{i.itemcolor}}</p>
+          </div>
+         <div class="modal-body" >
+            <form style="font-size:25px" method="POST" action="{{url_for('order')}}">
                <div class="form-group">
-                  <label>Name:</label>
-                   <input type="hidden"  name="id" value="{{i.Id}}">
-                  <input type="text" class="form-control" name="carName" value="{{i.carName}}">
+                  <h4><b>Your Name: </b></h4>
+                  <input type="text" class="form-control" name="uname" required>
+                   <input type="hidden"  name="id" value="{{i.id}}">
                </div>
                <div class="form-group">
-                  <label>Car Price:</label>
-                  <input type="text" class="form-control" name="carPrice" value="{{i.carPrice}}">
+                  <h4><b>Email: </b></h4>
+                  <input type="email" class="form-control" name="uemail" required>
                </div>
                <div class="form-group">
-                  <label>Colour:</label>
-                  <input type="text" class="form-control" name="carColor" value="{{i.carColor}}">
+                  <h4><b>phone No.: </b></h4>
+                  <input type="text" class="form-control" name="uphone" required>
+               </div>
+                <div class="form-group">
+                  <h4><b>Address: </b></h4>
+                  <input type="text" class="form-control" name="uaddress" required>
                </div>
                <div class="form-group">
-                  <button class="btn btn-primary" type="submit">Update</button>
+                  <button class="btn btn-primary" onclick="return confirm('your order is succefully received. Click on cancel button if you want to cancel your order?')" type="submit">Book This</button>
                </div>
             </form>
          </div>
@@ -145,17 +155,11 @@ style="width:50px;height:50px;"
       </div>
    </div>
 </div>
-    </div>
+</div>
 </div>
   </div>
 {% endfor %}
 </div>
-<div style="position: absolute;
-  top: 80px;
-  right: 0;
-  width: 200px;
-  height: 100px;
-  border: 3px solid #73AD21;">This div element has position: absolute;</div>
   <p><a href="{{ url_for('chatbott') }}">ChatBot!</a></p>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

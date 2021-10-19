@@ -97,13 +97,46 @@ def get_bot_response():
     userText = request.args.get('msg')
     return str(bot1.get_response(userText))
 # ------------------------------------------------------------
+
+
+# Booking by users
+
+
+class Users(db.Model):
+    id = db.Column(db.Integer, primary_key=True, unique=True)
+    uname = db.Column(db.String(20), primary_key=False)
+    uemail = db.Column(db.String(20), unique=False, nullable=False)
+    uphone = db.Column(db.String(20), unique=False, nullable=False)
+    uaddress = db.Column(db.String(200), unique=False, nullable=False)
+
+
+@app.route("/order", methods=['GET', 'POST'])
+def order():
+    if request.method == 'POST':
+        id = request.form.get('id')
+        uname = request.form.get('uname')
+        uemail = request.form.get('uemail')
+        uphone = request.form.get('uphone')
+        uaddress = request.form.get('uaddress')
+        entry = Users(id=id, uname=uname, uemail=uemail, uphone=uphone, uaddress=uaddress)
+        db.session.add(entry)
+        db.session.commit()
+
+    return redirect(url_for('home'))
+
 # Admin Section
-
-
 @app.route("/adminpage")
 def adminPage():
-
-    return render_template("AdminIndex.html")
+    # SQL INNER JOIN
+    sql = text('select items.id, items.itemname,items.itemprice,items.itemcolor,items.photo,users.uname,'
+               ' users.uemail,users.uphone,users.uaddress from items inner join users on items.id = users.id;')
+    result = db.engine.execute(sql)
+    # for row in result:
+    #     d = dict(row.items())
+    #     d. = b64encode(d[4]).decode("utf-8")
+    # for i in result:
+    #     i.photo = b64encode(i.photo).decode("utf-8")
+    return render_template("AdminIndex.html", order=result)
 
 
 if __name__ == "__main__":

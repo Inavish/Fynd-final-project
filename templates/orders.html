@@ -1,0 +1,48 @@
+<section >
+	<div class="container">
+		<div class="section-title">
+			<hr><h2>Available cars in your showroom</h2><hr>
+		</div>
+		<p class="lead alert alert-warning">This is a list of all the Cars</p>
+		<table class="table">
+			<tr>
+                <th>Model NO.</th>
+				<th>User name</th>
+				<th>User email</th>
+				<th>User phone</th>
+				<th>User Address</th>
+			</tr>
+			{% for i in order %}
+			<tr>
+                <td>{{ i.id}}</td>
+				<td>{{ i.uname}}</td>
+				<td>{{ i.uemail}}</td>
+				<td>{{ i.uphone }}</td>
+				<td>{{ i.uaddress }}</td>
+                 <td>
+                    <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#orderh{{i.id}}">See Details</a>
+                 </td>
+			</tr>
+			 <div id="orderh{{i.id}}" class="modal fade" role="dialog">
+               <div class="modal-dialog">
+                  <div class="modal-content">
+                     <div class="modal-header">
+                        <h4 class="modal-title"><b>Details of ordered item</b></h4>
+                     </div>
+                      <img src="data:;base64,{{ i.photo }}" style="height:160px;"/>
+                      <div style="padding: 25px;">
+                        <h4><b>Details: </b></h4>
+                         <p>Type: {{i.itemname}}</p>
+                         <p>Price: {{i.itemprice}} Rs/Day</p>
+                         <p>Colour: {{i.itemcolor}}</p>
+                      </div>
+                     <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                     </div>
+                  </div>
+               </div>
+             </div>
+			{% endfor %}
+		</table>
+    </div>
+    </section>
