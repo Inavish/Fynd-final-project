@@ -1,0 +1,34 @@
+<section id="addCars">
+                <div class="container">
+
+                    <div class="section-title">
+                        <hr><h2>Add Items to your website</h2><hr>
+                    </div>
+                  <form style="font-size:25px" method="POST" action="/insertitem" enctype="multipart/form-data">
+                        <div class="form-group ">
+                            <label for="SrNo" class="col-sm-2 col-form-label">Id</label>
+                          <div class="col-sm-10">
+                           <input type="text" class="form-control" name="id" placeholder="Name" required>
+                          </div>
+                          <label for="ItemName" class="col-sm-2 col-form-label">Item Name</label>
+                          <div class="col-sm-10">
+                           <input type="text" class="form-control" name="itemname" placeholder="Name" required>
+                          </div>
+                          <label for="ItemPrice"  class="col-sm-2 col-form-label">Price of Item</label>
+                         <div class="col-sm-10">
+                         <input type="text" class="form-control" name="itemprice"  placeholder="$$$$" required>
+                         </div>
+                        <label for="ItemColour"  class="col-sm-2 col-form-label">Colour of Item</label>
+                       <div class="col-sm-10">
+                       <input type="text" class="form-control" name="itemcolor"  placeholder="Colour" required>
+                       </div>
+                        <label for="ItemImage"  class="col-sm-2 col-form-label">Upload photo</label>
+                       <div class="col-sm-10">
+                       <input type="file" id="myFile" name="photo">
+                       </div>
+                       </div>
+                    <button type="submit" onclick="return confirm('Are you sure to add this Item in your website?')" class="btn btn-primary btn btn-dark mb-2">Add this Item</button><br><br>
+               </form>
+
+          </div>
+      </section>
