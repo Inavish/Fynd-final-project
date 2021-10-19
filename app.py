@@ -29,6 +29,9 @@ class Items(db.Model):
 #     return render_template("index.html", items=result)
 @app.route('/')
 def home():
+    # sql = text('select * from car')
+    # all_data = db.engine.execute(sql)
+
     all_data = Items.query.all()
     for i in all_data:
         i.photo = b64encode(i.photo).decode("utf-8")
@@ -52,12 +55,31 @@ def insert():
 # Chat bot code
 # Chat bot training data-----------------------------------------------------------------------------------------
 #
-#
+# #
 # with open('file.txt', 'r') as file:
 #     conversation = file.read()
 #
-# bott = ChatBot("Fynd ChatBot")
-# trainer2 = ListTrainer(bott)
+# bot1 = ChatBot("Fynd ChatBot")
+# trainer2 = ListTrainer(bot1)
+# trainer2.train(["Hey",
+# "Hi there!",
+# "Hi",
+# "Hi!",
+# "How are you doing?",
+# "I'm doing great.",
+# "That is good to hear",
+# "Thank you.",
+# "You're welcome.",
+# "What is your name?", "My name is Fynd ChatBot",
+# "Who created you?", "Shivani",
+# "Tell me about yourself",
+# "My name is Fynd Chatbot. I am created to help customers for there general queries",
+# "Contact",
+# "Email : Fynd@gmail.com, Mobile number : +91 1234567890 Location : Mumbai, Maharashtra",
+# "Available items","T-shirt, Dress, Jeans, Jeans, saree etc",
+#
+# "Projects",""])
+#
 # trainer2.train(conversation)
 
 
@@ -73,7 +95,7 @@ def chatbott():
 @app.route("/get")
 def get_bot_response():
     userText = request.args.get('msg')
-    return str(bott.get_response(userText))
+    return str(bot1.get_response(userText))
 # ------------------------------------------------------------
 # Admin Section
 

@@ -13,7 +13,7 @@
 "My name is Fynd. I am created to help customers for there general queries",
 "Contact",
 "Email : Fynd@gmail.com, Mobile number : +91 1234567890 Location : Mumbai, Maharashtra",
-"Available items",
-"T-shirt, Dress, Jeans, Jeans, saree etc",
+"Available items","T-shirt, Dress, Jeans, Jeans, saree etc",
+
 "Projects",
 ]
