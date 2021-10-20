@@ -4,6 +4,7 @@ from chatterbot.trainers import ListTrainer
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 from base64 import b64encode
+import smtplib
 
 
 app = Flask(__name__)
@@ -121,6 +122,11 @@ def order():
         entry = Users(id=id, uname=uname, uemail=uemail, uphone=uphone, uaddress=uaddress)
         db.session.add(entry)
         db.session.commit()
+        messege = "Your order is successfully recieved!"
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server.starttls()
+        server.login("shivani151020@gmail.com", "Shiv@ni#1510")
+        server.sendmail("shivani151020@gmail.com", uemail, messege)
 
     return redirect(url_for('home'))
 
@@ -132,10 +138,11 @@ def adminPage():
                ' users.uemail,users.uphone,users.uaddress from items inner join users on items.id = users.id;')
     result = db.engine.execute(sql)
     # for row in result:
+    #     row = dict(row.items)
+    #     row.photo = b64encode(row.photo).decode("utf-8")
+    # for row in result:
     #     d = dict(row.items())
-    #     d. = b64encode(d[4]).decode("utf-8")
-    # for i in result:
-    #     i.photo = b64encode(i.photo).decode("utf-8")
+    #     d['photo'] = b64encode(d['photo']).decode("utf-8")
     return render_template("AdminIndex.html", order=result)
 
 
