@@ -117,7 +117,7 @@ def sendotp(uemail):
     messege1 = str(otp)
     server = smtplib.SMTP("smtp.gmail.com", 587)
     server.starttls()
-    server.login("shivani151020@gmail.com", "Shiv@ni#1510")
+    server.login("shivani151020@gmail.com", "#")
     server.sendmail("shivani151020@gmail.com", uemail, messege1)
 
 
