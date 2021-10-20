@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OTP VERIFY</title>
+</head>
+<body>
+<form action="/validate" method="post">
+    <h4><b>Details: </b></h4>
+    <p>your name: {{uname}}</p>
+    <p>Email: {{uemail}}</p>
+    <p>Phone no.: {{uphone}}</p>
+     <p>Address: {{uaddress}}</p>
+    <h1>One time password has been sent to the mail id. please check </h1>
+    Enter OTP: <input type="text" name="otp">
+    <input type="hidden"  name="uname" value="{{uname}}">
+    <input type="hidden"  name="uemail" value="{{uemail}}">
+    <input type="hidden"  name="uphone" value="{{uphone}}">
+    <input type="hidden"  name="uaddress" value="{{uaddress}}">
+    <input type="hidden"  name="id" value="{{id}}">
+    <input type="submit" value="Submit">
+</form>
+</body>
+</html>

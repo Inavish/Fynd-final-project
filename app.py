@@ -4,6 +4,7 @@ from chatterbot.trainers import ListTrainer
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 from base64 import b64encode
+from random import randint
 import smtplib
 
 
@@ -11,6 +12,7 @@ app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Inavish15@localhost/fynd'
 db = SQLAlchemy(app)
+otp = randint(000000, 999999)
 
 
 class Items(db.Model):
@@ -111,6 +113,31 @@ class Users(db.Model):
     uaddress = db.Column(db.String(200), unique=False, nullable=False)
 
 
+def sendotp(uemail):
+    messege1 = str(otp)
+    server = smtplib.SMTP("smtp.gmail.com", 587)
+    server.starttls()
+    server.login("shivani151020@gmail.com", "Shiv@ni#1510")
+    server.sendmail("shivani151020@gmail.com", uemail, messege1)
+
+
+@app.route('/validate',methods=['POST'])
+def validate():
+    if request.method == 'POST':
+        id = request.form.get('id')
+        uname = request.form.get('uname')
+        uemail = request.form.get('uemail')
+        uphone = request.form.get('uphone')
+        uaddress = request.form.get('uaddress')
+        user_otp=request.form['otp']
+        if otp==int(user_otp):
+            entry = Users(id=id, uname=uname, uemail=uemail, uphone=uphone, uaddress=uaddress)
+            db.session.add(entry)
+            db.session.commit()
+            return "<h3>Receipt has been sent to you on your email</h3>"
+        return "<h3>Please Try Again</h3>"
+
+
 @app.route("/order", methods=['GET', 'POST'])
 def order():
     if request.method == 'POST':
@@ -119,16 +146,14 @@ def order():
         uemail = request.form.get('uemail')
         uphone = request.form.get('uphone')
         uaddress = request.form.get('uaddress')
-        entry = Users(id=id, uname=uname, uemail=uemail, uphone=uphone, uaddress=uaddress)
-        db.session.add(entry)
-        db.session.commit()
-        messege = "Your order is successfully recieved!"
-        server = smtplib.SMTP("smtp.gmail.com", 587)
-        server.starttls()
-        server.login("shivani151020@gmail.com", "Shiv@ni#1510")
-        server.sendmail("shivani151020@gmail.com", uemail, messege)
+        sendotp(uemail)
+        # messege = "Your order is successfully recieved!"
+        # server = smtplib.SMTP("smtp.gmail.com", 587)
+        # server.starttls()
+        # server.login("shivani151020@gmail.com", "Shiv@ni#1510")
+        # server.sendmail("shivani151020@gmail.com", uemail, messege)
 
-    return redirect(url_for('home'))
+    return render_template("otpVerification.html",id = id, uname=uname, uemail=uemail, uphone=uphone, uaddress=uaddress)
 
 # Admin Section
 @app.route("/adminpage")
