@@ -6,7 +6,11 @@ from sqlalchemy.sql import text
 from base64 import b64encode
 from random import randint
 import smtplib
-
+import pdfkit
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
 
 app = Flask(__name__)
 
@@ -117,11 +121,40 @@ def sendotp(uemail):
     messege1 = str(otp)
     server = smtplib.SMTP("smtp.gmail.com", 587)
     server.starttls()
-    server.login("shivani151020@gmail.com", "#")
+    server.login("shivani151020@gmail.com", "Shiv@ni#1510")
     server.sendmail("shivani151020@gmail.com", uemail, messege1)
 
 
-@app.route('/validate',methods=['POST'])
+def sendpdf(id, uname, uemail, uphone, uaddress):
+    html = render_template("receipt_pdf.html", id = id, uname=uname, uemail=uemail, uphone=uphone, uaddress=uaddress)
+    pdf = pdfkit.from_string(html, False)
+    # sudo apt-get install wkhtmltopdf
+    fromaddr = "shivani151020@gmail.com"
+    toaddr = uemail
+
+    msg = MIMEMultipart()
+
+    msg['From'] = fromaddr
+    msg['To'] = toaddr
+    msg['Subject'] = "Fynd order reciept"
+    body = "Please find below attached pdf"
+    msg.attach(MIMEText(body, 'plain'))
+    filename = "Fynd_Order_receipt"
+    attachment = open("shivani.pdf", "rb")
+    part = MIMEBase('application', 'octet-stream')
+    part.set_payload(attachment.read())
+    encoders.encode_base64(part)
+    part.add_header('Content-Disposition', "attachment; filename= %s" % filename)
+    msg.attach(part)
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login(fromaddr, "Shiv@ni#1510")
+    text = msg.as_string()
+    server.sendmail(fromaddr, toaddr, text)
+    server.quit()
+
+
+@app.route('/validate', methods=['POST'])
 def validate():
     if request.method == 'POST':
         id = request.form.get('id')
@@ -134,6 +167,7 @@ def validate():
             entry = Users(id=id, uname=uname, uemail=uemail, uphone=uphone, uaddress=uaddress)
             db.session.add(entry)
             db.session.commit()
+            sendpdf(id, uname, uemail, uphone, uaddress)
             return "<h3>Receipt has been sent to you on your email</h3>"
         return "<h3>Please Try Again</h3>"
 
@@ -147,13 +181,9 @@ def order():
         uphone = request.form.get('uphone')
         uaddress = request.form.get('uaddress')
         sendotp(uemail)
-        # messege = "Your order is successfully recieved!"
-        # server = smtplib.SMTP("smtp.gmail.com", 587)
-        # server.starttls()
-        # server.login("shivani151020@gmail.com", "Shiv@ni#1510")
-        # server.sendmail("shivani151020@gmail.com", uemail, messege)
 
     return render_template("otpVerification.html",id = id, uname=uname, uemail=uemail, uphone=uphone, uaddress=uaddress)
+
 
 # Admin Section
 @app.route("/adminpage")
