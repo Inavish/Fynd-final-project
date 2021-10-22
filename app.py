@@ -12,6 +12,7 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 
+
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:inavish15@localhost/fynd'
@@ -66,7 +67,9 @@ def insert():
 with open('file.txt', 'r') as file:
     conversation = file.read()
 
-bot1 = ChatBot("Fynd ChatBot")
+bot1 = ChatBot('mysqlbot', storage_adapter="chatterbot.storage.SQLStorageAdapter",
+               database_uri="mysql+pymysql://root:inavish15@localhost/shivanichatbot",)
+# bot1 = ChatBot("Fynd ChatBot")
 trainer2 = ListTrainer(bot1)
 trainer2.train(["Hey",
 "Hi there!",
