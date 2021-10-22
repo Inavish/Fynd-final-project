@@ -14,7 +14,7 @@ from email import encoders
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Inavish15@localhost/fynd'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:inavish15@localhost/fynd'
 db = SQLAlchemy(app)
 otp = randint(000000, 999999)
 
@@ -62,32 +62,32 @@ def insert():
 # Chat bot code
 # Chat bot training data-----------------------------------------------------------------------------------------
 #
-# #
-# with open('file.txt', 'r') as file:
-#     conversation = file.read()
 #
-# bot1 = ChatBot("Fynd ChatBot")
-# trainer2 = ListTrainer(bot1)
-# trainer2.train(["Hey",
-# "Hi there!",
-# "Hi",
-# "Hi!",
-# "How are you doing?",
-# "I'm doing great.",
-# "That is good to hear",
-# "Thank you.",
-# "You're welcome.",
-# "What is your name?", "My name is Fynd ChatBot",
-# "Who created you?", "Shivani",
-# "Tell me about yourself",
-# "My name is Fynd Chatbot. I am created to help customers for there general queries",
-# "Contact",
-# "Email : Fynd@gmail.com, Mobile number : +91 1234567890 Location : Mumbai, Maharashtra",
-# "Available items","T-shirt, Dress, Jeans, Jeans, saree etc",
-#
-# "Projects",""])
-#
-# trainer2.train(conversation)
+with open('file.txt', 'r') as file:
+    conversation = file.read()
+
+bot1 = ChatBot("Fynd ChatBot")
+trainer2 = ListTrainer(bot1)
+trainer2.train(["Hey",
+"Hi there!",
+"Hi",
+"Hi!",
+"How are you doing?",
+"I'm doing great.",
+"That is good to hear",
+"Thank you.",
+"You're welcome.",
+"What is your name?", "My name is Fynd ChatBot",
+"Who created you?", "Shivani",
+"Tell me about yourself",
+"My name is Fynd Chatbot. I am created to help customers for there general queries",
+"Contact",
+"Email : Fynd@gmail.com, Mobile number : +91 1234567890 Location : Mumbai, Maharashtra",
+"Available items","T-shirt, Dress, Jeans, Jeans, saree etc",
+
+"Projects",""])
+
+trainer2.train(conversation)
 
 
 # Functions for chatbot-----------------------------------------------------------------------------------------
@@ -126,8 +126,8 @@ def sendotp(uemail):
 
 
 def sendpdf(id, uname, uemail, uphone, uaddress):
-    html = render_template("receipt_pdf.html", id = id, uname=uname, uemail=uemail, uphone=uphone, uaddress=uaddress)
-    pdf = pdfkit.from_string(html, False)
+    # html = render_template("receipt_pdf.html", id = id, uname=uname, uemail=uemail, uphone=uphone, uaddress=uaddress)
+    # pdf = pdfkit.from_string(html, False)
     # sudo apt-get install wkhtmltopdf
     fromaddr = "shivani151020@gmail.com"
     toaddr = uemail
@@ -137,15 +137,15 @@ def sendpdf(id, uname, uemail, uphone, uaddress):
     msg['From'] = fromaddr
     msg['To'] = toaddr
     msg['Subject'] = "Fynd order reciept"
-    body = "Please find below attached pdf"
+    body = f"Name: {uname}\nEmail: {uemail}\nPhone No.: {uphone}\nAddress: {uaddress}"
     msg.attach(MIMEText(body, 'plain'))
-    filename = "Fynd_Order_receipt"
-    attachment = open("shivani.pdf", "rb")
-    part = MIMEBase('application', 'octet-stream')
-    part.set_payload(attachment.read())
-    encoders.encode_base64(part)
-    part.add_header('Content-Disposition', "attachment; filename= %s" % filename)
-    msg.attach(part)
+    # filename = "Fynd_Order_receipt"
+    # attachment = open("shivani.pdf", "rb")
+    # part = MIMEBase('application', 'octet-stream')
+    # part.set_payload(attachment.read())
+    # encoders.encode_base64(part)
+    # part.add_header('Content-Disposition', "attachment; filename= %s" % filename)
+    # msg.attach(part)
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.starttls()
     server.login(fromaddr, "Shiv@ni#1510")
