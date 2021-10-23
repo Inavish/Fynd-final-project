@@ -68,7 +68,7 @@ with open('file.txt', 'r') as file:
     conversation = file.read()
 
 bot1 = ChatBot('mysqlbot', storage_adapter="chatterbot.storage.SQLStorageAdapter",
-               database_uri="mysql+pymysql://root:inavish15@localhost/shivanichatbot",)
+               database_uri="mysql+pymysql://root:inavish15@localhost/fynd",)
 # bot1 = ChatBot("Fynd ChatBot")
 trainer2 = ListTrainer(bot1)
 trainer2.train(["Hey",
@@ -124,7 +124,7 @@ def sendotp(uemail):
     messege1 = str(otp)
     server = smtplib.SMTP("smtp.gmail.com", 587)
     server.starttls()
-    server.login("shivani151020@gmail.com", "Shiv@ni#1510")
+    server.login("shivani151020@gmail.com", "#")
     server.sendmail("shivani151020@gmail.com", uemail, messege1)
 
 
@@ -151,7 +151,7 @@ def sendpdf(id, uname, uemail, uphone, uaddress):
     # msg.attach(part)
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.starttls()
-    server.login(fromaddr, "Shiv@ni#1510")
+    server.login(fromaddr, "#")
     text = msg.as_string()
     server.sendmail(fromaddr, toaddr, text)
     server.quit()
