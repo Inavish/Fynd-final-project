@@ -103,7 +103,7 @@ style="width:50px;height:50px;"
 
 <hr><h2>Available Items</h2><hr>
 <div class="row">
-{% for i in items %}
+{% for i in all_data.items %}
 
  <div class="col">
 <div class="card" style="width: 18rem;" >
@@ -160,6 +160,41 @@ style="width:50px;height:50px;"
   </div>
 {% endfor %}
 </div>
+<!-- Pagination Links-->
+<div class="text-right">
+    <a href="{{ url_for('home', page=all_data.prev_num) }}"
+       class="btn btn-outline-dark
+       {% if all_data.page == 1 %}disabled{% endif %}">
+        &laquo;
+    </a>
+<!-- Loop through the number of pages to display a link for each-->
+    {% for page_num in all_data.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+{% if page_num %}
+<!-- Check for the active page and set the link to "Active"-->
+            {% if all_data.page == page_num %}
+            <a href="{{ url_for('home', page=page_num) }}"
+               class="btn btn-dark">
+                {{ page_num }}
+            </a>
+            {% else %}
+            <a href="{{ url_for('home', page=page_num) }}"
+               class="btn btn-outline-dark">
+                {{ page_num }}
+            </a>
+            {% endif %}
+        {% else %}
+            ...
+        {% endif %}
+    {% endfor %}
+    <a href="{{ url_for('home', page=all_data.next_num) }}"
+       class="btn btn-outline-dark
+       {% if all_data.page == all_data.pages %}disabled{% endif %}">
+        &raquo;
+    </a>
+</div>
+<p class="text-right mt-3">
+   Showing page {{ all_data.page }} of {{ all_data.pages }}
+</p>
   <p><a href="{{ url_for('chatbott') }}">ChatBot!</a></p>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

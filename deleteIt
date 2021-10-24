@@ -78,3 +78,36 @@ def adminPage():
 
 if __name__ == "__main__":
     app.run(debug = True)
+
+
+
+
+
+
+
+
+
+
+sudo systemctl daemon-reload
+sudo systemctl restart Fynd-final-project
+sudo systemctl enable Fynd-final-project
+
+
+
+create table admin(id int not null, sname varchar(255), semail varchar(255), spassword varchar(255),primary key(id));
+create table users(uid int not null, id int, uname varchar(255), uemail varchar(255), uphone varchar(255), uaddress varchar(255), primary key(uid));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

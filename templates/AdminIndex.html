@@ -16,9 +16,9 @@
 				style="width:100px;height:80px;"/>
 				<ul>
 					<li><a href="#">Main Dashboard</a></li>
+					<li><a href="#product">Products</a></li>
 					<li><a href="#addItems">Add Items</a></li>
 					<li><a href="#orders">Orders</a></li>
-					<li><a href="#">Account</a></li>
 					<li><a href="#">setting</a></li>
 					<li><a href="#">Log out</a></li>
 				</ul>
@@ -27,12 +27,16 @@
 				<div class="topbar">
 					<h2>Dashboard </h2>
 				</div> </br>
+				<div id="product">
+					{% include 'product.html' %}
+				</div>
 				<div id="addItems">
 					{% include 'addItems.html' %}
 				</div>
 				<div id="orders">
 					{% include 'orders.html' %}
 				</div>
+
 			</div>
 		</div>
 

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+
+form {border: 3px solid #f1f1f1; width:40%;}
+
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: black;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+
+.imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+}
+.container {
+  padding: 16px;
+}
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+</style>
+</head>
+<body>{{error}}
+<h2 style="text-align: center;">Login Form</h2>
+<form style="margin: auto; width: 50%;border: 3px solid black;padding: 10px;" action="/adminlogin" method="post">
+  <div class="container">
+    <label ><b>Email</b></label>
+    <input type="text" placeholder="Enter Username" name="semail" required>
+    <label><b>Password</b></label>
+    <input type="text" placeholder="Enter Password" name="spassword" required>
+    <button type="submit">Login</button>
+  </div>
+</form>
+</body>
+</html>
