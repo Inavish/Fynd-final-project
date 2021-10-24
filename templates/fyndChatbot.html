@@ -5,31 +5,33 @@
 <link
 rel="shortcut icon"
 type="image/x-icon"
-href="https://assets.website-files.com/5f2bd20de11b965424e6cb83/60c2f7ee3d33e2e05090942d_Fynd.png"
-/>
+href="
+"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='chatbot.css') }}">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+ <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/slideshow.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="shortcut icon" type="image/x-icon" href="https://assets.website-files.com/5f2bd20de11b965424e6cb83/60c2f7ee3d33e2e05090942d_Fynd.png"/>
 
 </head>
 
 <body>
-<img />
-<center>
+{% include 'navbar.html' %}
+
+
+<div class="boxed" style="width:50%;">
+    <center>
 <h1>
-<img
-src="https://assets.website-files.com/5f2bd20de11b965424e6cb83/60c2f7ee3d33e2e05090942d_Fynd.png"
-style="width:50px;height:50px;"
-/>Fynd Chatbot!
+<img src="{{url_for('static', filename='icon.png')}}" style="width:50px;height:50px;"/>Fynd Chatbot!
 </h1>
 </center>
-<div class="box"></div>
-<div class="boxed">
 <div>
 <div id="chatbox">
-<img
-src="https://assets.website-files.com/5f2bd20de11b965424e6cb83/60c2f7ee3d33e2e05090942d_Fynd.png"
-style="width:50px;height:50px;"
-/>
+<img src="{{url_for('static', filename='icon.png')}}" style="width:50px;height:50px;"/>
 <p class="botText">
 <span>Hello there! I am Fynd ChatBot</span>
 </p>
@@ -62,5 +64,9 @@ style="width:50px;height:50px;"
         });
       </script>
 </div>
+<p style="height:20%;">
+
+</p>
+
 </body>
 </html>

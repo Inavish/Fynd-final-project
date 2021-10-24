@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, session
 from chatterbot import ChatBot
 from chatterbot.trainers import ListTrainer
 from flask_sqlalchemy import SQLAlchemy
@@ -12,8 +12,8 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 
-
 app = Flask(__name__)
+
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:inavish15@localhost/fynd'
 db = SQLAlchemy(app)
@@ -35,7 +35,7 @@ class Items(db.Model):
 #
 #     return render_template("index.html", items=result)
 
-ROWS_PER_PAGE = 5
+ROWS_PER_PAGE = 6
 
 
 @app.route('/')
@@ -181,18 +181,6 @@ def order():
 
 
 # Admin Section
-@app.route('/adminlogin', methods=['GET', 'POST'])
-def login():
-    error = None
-    if request.method == 'POST':
-        if request.form['semail'] != 'shivani151020@gmail.com' or request.form['spassword'] != 'shivani123':
-            error = 'Invalid Credentials. Please try again.'
-        else:
-            return adminPage()
-    return render_template('adminlogin.html', error=error)
-
-
-
 @app.route("/adminpage")
 def adminPage():
     # SQL INNER JOIN
