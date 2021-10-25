@@ -5,16 +5,18 @@
 		</div>
 		<p class="lead alert alert-warning">This is a list of all the orders</p>
 		<table class="table">
-			<tr>
+			<tr><th>User ID</th>
                 <th>Model NO.</th>
 				<th>User name</th>
 				<th>User email</th>
 				<th>User phone</th>
 				<th>User Address</th>
                 <th>Details</th>
+                <th>Delete</th>
 			</tr>
 			{% for i in order %}
 			<tr>
+                <td>{{ i.uid}}</td>
                 <td>{{ i.id}}</td>
 				<td>{{ i.uname}}</td>
 				<td>{{ i.uemail}}</td>
@@ -23,6 +25,10 @@
                  <td>
                     <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#orderh{{i.id}}">See Details</a>
                  </td>
+                <td>
+                    <a href="/deleteuser/{{i.uid}}" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure to delete?')">Delete</a>
+
+                 </td>
 			</tr>
 			 <div id="orderh{{i.id}}" class="modal fade" role="dialog">
                <div class="modal-dialog">
@@ -30,12 +36,17 @@
                      <div class="modal-header">
                         <h4 class="modal-title"><b>Details of ordered item</b></h4>
                      </div>
-                      <img src="data:;base64,{{ i.photo }}" style="height:160px;"/>
                       <div style="padding: 25px;">
                         <h4><b>Details: </b></h4>
+                          <p>User ID: {{i.uid}}</p>
+                          <p>Model No: {{i.id}}</p>
                          <p>Type: {{i.itemname}}</p>
                          <p>Price: {{i.itemprice}} Rs/Day</p>
                          <p>Colour: {{i.itemcolor}}</p>
+                          <p>From Date: {{i.fromdate}}</p>
+                          <p>To Date: {{i.todate}}</p>
+                          <p>Number of total days for which product is rented: {{i.totaldays}} Day</p>
+                          <p>Total cost for {{i.totaldays}} days: {{i.totalcost}} Rs</p>
                       </div>
                      <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

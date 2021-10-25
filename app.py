@@ -113,6 +113,8 @@ class Users(db.Model):
     uaddress = db.Column(db.String(200), unique=False, nullable=False)
     fromdate = db.Column(db.String(200), nullable=False)
     todate = db.Column(db.String(200), nullable=False)
+    totalcost = db.Column(db.Integer,nullable=False)
+    totaldays = db.Column(db.Integer,nullable=False)
 
 
 def sendotp(uemail):
@@ -123,7 +125,7 @@ def sendotp(uemail):
     server.sendmail("shivani151020@gmail.com", uemail, messege1)
 
 
-def sendpdf(id, uname, uemail, uphone, uaddress,fromdate, todate,product_details, total_days, total_cost):
+def sendpdf(id, uname, uemail, uphone, uaddress,fromdate, todate,product_details, totaldays, totalcost):
     # html = render_template("receipt_pdf.html", id = id, uname=uname, uemail=uemail, uphone=uphone, uaddress=uaddress)
     # pdf = pdfkit.from_string(html, False)
     # sudo apt-get install wkhtmltopdf
@@ -135,7 +137,7 @@ def sendpdf(id, uname, uemail, uphone, uaddress,fromdate, todate,product_details
     msg['From'] = fromaddr
     msg['To'] = toaddr
     msg['Subject'] = "Fynd order reciept"
-    body = f"Name: {uname}\nEmail: {uemail}\nPhone No.: {uphone}\nAddress: {uaddress}\nProduct Name: {product_details.itemname}\nPrice: {product_details.itemprice} Rs\day\nColour: {product_details.itemcolor}\nFrom Date: {fromdate}\nTo date: {todate}\nNumber of total days fro which product is rented: {total_days}\nTotal cost: {total_cost} Rs "
+    body = f"Name: {uname}\nEmail: {uemail}\nPhone No.: {uphone}\nAddress: {uaddress}\nProduct Name: {product_details.itemname}\nPrice: {product_details.itemprice} Rs\day\nColour: {product_details.itemcolor}\nFrom Date: {fromdate}\nTo date: {todate}\nNumber of total days for which the product is rented: {totaldays}\nTotal cost for {totaldays} days: {totalcost} Rs "
     msg.attach(MIMEText(body, 'plain'))
     # filename = "Fynd_Order_receipt"
     # attachment = open("shivani.pdf", "rb")
@@ -175,17 +177,16 @@ def validate():
         uaddress = request.form.get('uaddress')
         fromdate = request.form.get('fromdate')
         todate = request.form.get('todate')
-
         user_otp = request.form['otp']
+        q = int(id)
+        product_details = Items.query.get(q)
+        totaldays = days_calc(fromdate, todate)
+        totalcost = totaldays * int(product_details.itemprice)
         if otp == int(user_otp):
-            entry = Users(id=id, uname=uname, uemail=uemail, uphone=uphone, uaddress=uaddress, fromdate=fromdate, todate=todate)
+            entry = Users(id=id, uname=uname, uemail=uemail, uphone=uphone, uaddress=uaddress, fromdate=fromdate, todate=todate, totaldays=totaldays,totalcost=totalcost)
             db.session.add(entry)
             db.session.commit()
-            q = int(id)
-            product_details = Items.query.get(q)
-            total_days = days_calc(fromdate, todate)
-            total_cost = total_days * int(product_details.itemprice)
-            sendpdf(id, uname, uemail, uphone, uaddress,fromdate, todate,product_details, total_days, total_cost)
+            sendpdf(id, uname, uemail, uphone, uaddress,fromdate, todate,product_details, totaldays, totalcost)
             return "<h3>Receipt has been sent to you on your email</h3>"
         return "<h3>Please Try Again</h3>"
 
@@ -203,19 +204,20 @@ def order():
         q = int(id)
         product_details = Items.query.get(q)
         product_details.photo = b64encode(product_details.photo).decode("utf-8")
-        total_days = days_calc(fromdate, todate)
-        total_cost = total_days * int(product_details.itemprice)
+        totaldays = days_calc(fromdate, todate)
+        totalcost = totaldays * int(product_details.itemprice)
         sendotp(uemail)
 
-    return render_template("otpVerification.html", id=id, uname=uname, uemail=uemail, uphone=uphone, uaddress=uaddress, fromdate=fromdate, todate=todate,product_details=product_details, total_days=total_days, total_cost=total_cost )
+    return render_template("otpVerification.html", id=id, uname=uname, uemail=uemail, uphone=uphone, uaddress=uaddress, fromdate=fromdate, todate=todate,product_details=product_details, totaldays=totaldays, totalcost=totalcost )
 
 
 # Admin Section
 @app.route("/adminpage")
 def adminPage():
     # SQL INNER JOIN
-    sql = text('select items.id, items.itemname,items.itemprice,items.itemcolor,items.photo,users.uname,'
-               ' users.uemail,users.uphone,users.uaddress from items inner join users on items.id = users.id;')
+    sql = text('select items.id, items.itemname,items.itemprice,items.itemcolor,users.uname,users.uid,'
+               'users.uemail,users.uphone,users.uaddress,users.fromdate, users.todate,users.totaldays, '
+               'users.totalcost from items inner join users on items.id = users.id order by users.uid;')
     result = db.engine.execute(sql)
     page = request.args.get('page', 1, type=int)
     all_data = Items.query.paginate(page=page, per_page=ROWS_PER_PAGE)
@@ -259,6 +261,14 @@ def update():
 @app.route('/delete/<id>/', methods = ['GET', 'POST'])
 def delete(id):
     my_data = Items.query.get(id)
+    db.session.delete(my_data)
+    db.session.commit()
+
+    return redirect(url_for('adminPage'))
+
+@app.route('/deleteuser/<id>/', methods = ['GET', 'POST'])
+def delete_user(id):
+    my_data = Users.query.get(id)
     db.session.delete(my_data)
     db.session.commit()
 
