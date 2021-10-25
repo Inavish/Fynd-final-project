@@ -11,6 +11,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
+from datetime import date
 
 app = Flask(__name__)
 
@@ -122,7 +123,7 @@ def sendotp(uemail):
     server.sendmail("shivani151020@gmail.com", uemail, messege1)
 
 
-def sendpdf(id, uname, uemail, uphone, uaddress):
+def sendpdf(id, uname, uemail, uphone, uaddress,fromdate, todate,product_details, total_days, total_cost):
     # html = render_template("receipt_pdf.html", id = id, uname=uname, uemail=uemail, uphone=uphone, uaddress=uaddress)
     # pdf = pdfkit.from_string(html, False)
     # sudo apt-get install wkhtmltopdf
@@ -134,7 +135,7 @@ def sendpdf(id, uname, uemail, uphone, uaddress):
     msg['From'] = fromaddr
     msg['To'] = toaddr
     msg['Subject'] = "Fynd order reciept"
-    body = f"Name: {uname}\nEmail: {uemail}\nPhone No.: {uphone}\nAddress: {uaddress}"
+    body = f"Name: {uname}\nEmail: {uemail}\nPhone No.: {uphone}\nAddress: {uaddress}\nProduct Name: {product_details.itemname}\nPrice: {product_details.itemprice} Rs\day\nColour: {product_details.itemcolor}\nFrom Date: {fromdate}\nTo date: {todate}\nNumber of total days fro which product is rented: {total_days}\nTotal cost: {total_cost} Rs "
     msg.attach(MIMEText(body, 'plain'))
     # filename = "Fynd_Order_receipt"
     # attachment = open("shivani.pdf", "rb")
@@ -149,6 +150,19 @@ def sendpdf(id, uname, uemail, uphone, uaddress):
     text = msg.as_string()
     server.sendmail(fromaddr, toaddr, text)
     server.quit()
+
+
+def days_calc(fromdate, todate):
+    year = int(fromdate[:4])
+    m = int(fromdate[5:7])
+    d = int(fromdate[8:11])
+    d0 = date(year, m, d)
+    year = int(todate[:4])
+    m = int(todate[5:7])
+    d = int(todate[8:11])
+    d1 = date(year, m, d)
+    delta = d1 - d0
+    return delta.days
 
 
 @app.route('/validate', methods=['POST'])
@@ -167,7 +181,11 @@ def validate():
             entry = Users(id=id, uname=uname, uemail=uemail, uphone=uphone, uaddress=uaddress, fromdate=fromdate, todate=todate)
             db.session.add(entry)
             db.session.commit()
-            sendpdf(id, uname, uemail, uphone, uaddress)
+            q = int(id)
+            product_details = Items.query.get(q)
+            total_days = days_calc(fromdate, todate)
+            total_cost = total_days * int(product_details.itemprice)
+            sendpdf(id, uname, uemail, uphone, uaddress,fromdate, todate,product_details, total_days, total_cost)
             return "<h3>Receipt has been sent to you on your email</h3>"
         return "<h3>Please Try Again</h3>"
 
@@ -182,9 +200,14 @@ def order():
         uaddress = request.form.get('uaddress')
         fromdate = request.form.get('fromdate')
         todate = request.form.get('todate')
+        q = int(id)
+        product_details = Items.query.get(q)
+        product_details.photo = b64encode(product_details.photo).decode("utf-8")
+        total_days = days_calc(fromdate, todate)
+        total_cost = total_days * int(product_details.itemprice)
         sendotp(uemail)
 
-    return render_template("otpVerification.html", id=id, uname=uname, uemail=uemail, uphone=uphone, uaddress=uaddress, fromdate=fromdate, todate=todate)
+    return render_template("otpVerification.html", id=id, uname=uname, uemail=uemail, uphone=uphone, uaddress=uaddress, fromdate=fromdate, todate=todate,product_details=product_details, total_days=total_days, total_cost=total_cost )
 
 
 # Admin Section

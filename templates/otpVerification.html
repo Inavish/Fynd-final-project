@@ -5,14 +5,23 @@
     <title>OTP VERIFY</title>
 </head>
 <body>
+
+<h2><b>Product Details: </b></h2>
+    <img src="data:;base64,{{ product_details.photo }}" style="height:160px;"/>
+    <p>Product Name: {{product_details.itemname}}</p>
+    <p>Product Price: {{product_details.itemprice}} Rs/Day</p>
+    <p>Product Colour: {{product_details.itemcolor}}</p>
+
 <form action="/validate" method="post">
-    <h4><b>Details: </b></h4>
+    <h2><b>Your Details: </b></h2>
     <p>your name: {{uname}}</p>
     <p>Email: {{uemail}}</p>
     <p>Phone no.: {{uphone}}</p>
      <p>Address: {{uaddress}}</p>
     <p>From date : {{fromdate}}</p>
     <p>To Date: {{todate}}</p>
+    <p>Total Days : {{total_days}}</p>
+    <p>Total Price: {{total_cost}} Rs</p>
     <h1>One time password has been sent to the mail id. please check </h1>
     Enter OTP: <input type="text" name="otp">
     <input type="hidden"  name="uname" value="{{uname}}">
