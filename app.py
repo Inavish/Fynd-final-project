@@ -110,13 +110,15 @@ class Users(db.Model):
     uemail = db.Column(db.String(20), unique=False, nullable=False)
     uphone = db.Column(db.String(20), unique=False, nullable=False)
     uaddress = db.Column(db.String(200), unique=False, nullable=False)
+    fromdate = db.Column(db.String(200), nullable=False)
+    todate = db.Column(db.String(200), nullable=False)
 
 
 def sendotp(uemail):
     messege1 = str(otp)
     server = smtplib.SMTP("smtp.gmail.com", 587)
     server.starttls()
-    server.login("shivani151020@gmail.com", "SShivani#1510")
+    server.login("shivani151020@gmail.com", "#")
     server.sendmail("shivani151020@gmail.com", uemail, messege1)
 
 
@@ -143,7 +145,7 @@ def sendpdf(id, uname, uemail, uphone, uaddress):
     # msg.attach(part)
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.starttls()
-    server.login(fromaddr, "SShivani#1510")
+    server.login(fromaddr, "#")
     text = msg.as_string()
     server.sendmail(fromaddr, toaddr, text)
     server.quit()
@@ -157,9 +159,12 @@ def validate():
         uemail = request.form.get('uemail')
         uphone = request.form.get('uphone')
         uaddress = request.form.get('uaddress')
+        fromdate = request.form.get('fromdate')
+        todate = request.form.get('todate')
+
         user_otp = request.form['otp']
         if otp == int(user_otp):
-            entry = Users(id=id, uname=uname, uemail=uemail, uphone=uphone, uaddress=uaddress)
+            entry = Users(id=id, uname=uname, uemail=uemail, uphone=uphone, uaddress=uaddress, fromdate=fromdate, todate=todate)
             db.session.add(entry)
             db.session.commit()
             sendpdf(id, uname, uemail, uphone, uaddress)
@@ -175,9 +180,11 @@ def order():
         uemail = request.form.get('uemail')
         uphone = request.form.get('uphone')
         uaddress = request.form.get('uaddress')
+        fromdate = request.form.get('fromdate')
+        todate = request.form.get('todate')
         sendotp(uemail)
 
-    return render_template("otpVerification.html", id=id, uname=uname, uemail=uemail, uphone=uphone, uaddress=uaddress)
+    return render_template("otpVerification.html", id=id, uname=uname, uemail=uemail, uphone=uphone, uaddress=uaddress, fromdate=fromdate, todate=todate)
 
 
 # Admin Section
