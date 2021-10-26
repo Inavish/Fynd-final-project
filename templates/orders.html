@@ -26,9 +26,11 @@
                     <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#orderh{{i.id}}">See Details</a>
                  </td>
                 <td>
-                    <a href="/deleteuser/{{i.uid}}" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure to delete?')">Delete</a>
-
-                 </td>
+                    <form  method="POST" action="{{url_for('delete_user')}}" >
+                        <input type="hidden"  name="uid" value="{{i.uid}}">
+                     <button class="btn btn-primary" onclick="return confirm('Are you sure to delete?')" type="submit">Delete</button>
+                    </form>
+                </td>
 			</tr>
 			 <div id="orderh{{i.id}}" class="modal fade" role="dialog">
                <div class="modal-dialog">

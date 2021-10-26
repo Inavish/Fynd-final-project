@@ -6,12 +6,10 @@ from sqlalchemy.sql import text
 from base64 import b64encode
 from random import randint
 import smtplib
-import pdfkit
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from email.mime.base import MIMEBase
-from email import encoders
 from datetime import date
+
 
 app = Flask(__name__)
 
@@ -187,7 +185,7 @@ def validate():
             db.session.add(entry)
             db.session.commit()
             sendpdf(id, uname, uemail, uphone, uaddress,fromdate, todate,product_details, totaldays, totalcost)
-            return "<h3>Receipt has been sent to you on your email</h3>"
+            return redirect(url_for('home'))
         return "<h3>Please Try Again</h3>"
 
 
@@ -258,19 +256,24 @@ def update():
         return redirect(url_for('adminPage'))
 
 
-@app.route('/delete/<id>/', methods = ['GET', 'POST'])
-def delete(id):
-    my_data = Items.query.get(id)
-    db.session.delete(my_data)
-    db.session.commit()
+@app.route('/delete', methods = ['GET', 'POST'])
+def delete():
+    if request.method == 'POST':
+        id = request.form.get('id')
+        my_data = Items.query.get(id)
+        db.session.delete(my_data)
+        db.session.commit()
 
     return redirect(url_for('adminPage'))
 
-@app.route('/deleteuser/<id>/', methods = ['GET', 'POST'])
-def delete_user(id):
-    my_data = Users.query.get(id)
-    db.session.delete(my_data)
-    db.session.commit()
+
+@app.route('/deleteuser', methods = ['GET', 'POST'])
+def delete_user():
+    if request.method == 'POST':
+        uid = request.form.get('uid')
+        my_data = Users.query.get(uid)
+        db.session.delete(my_data)
+        db.session.commit()
 
     return redirect(url_for('adminPage'))
 

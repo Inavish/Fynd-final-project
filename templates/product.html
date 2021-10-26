@@ -24,8 +24,10 @@
                     <a href="/update/{{i.id}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{i.id}}">Update</a>
                  </td>
                  <td>
-                    <a href="/delete/{{i.id}}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure To Delete ?')">Delete</a>
-
+                    <form  method="POST" action="{{url_for('delete')}}" >
+                        <input type="hidden"  name="id" value="{{i.id}}">
+                     <button class="btn btn-primary" onclick="return confirm('Are you sure to delete?')" type="submit">Delete</button>
+                    </form>
                  </td>
 			</tr>
 			 <div id="modaledit{{i.id}}" class="modal fade" role="dialog">
