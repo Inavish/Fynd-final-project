@@ -76,7 +76,8 @@ trainer2.train(["Hey",
                 "Contact",
                 "Email : Fynd@gmail.com, Mobile number : +91 1234567890 Location : Mumbai, Maharashtra",
                 "Available items", "T-shirt, Dress, Jeans, Jeans, saree etc",
-
+                "Delivery", "Delivery of product will be done in 3-2 days",
+                "Current Offers", "Diwali sale, 50% discount on fist order",
                 "Projects", ""])
 
 trainer2.train(conversation)
